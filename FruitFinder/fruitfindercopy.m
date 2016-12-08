@@ -4,7 +4,7 @@
 function [apples, bananas, oranges] = fruitfindercopy(img)
     % imtool(img)
     imgHSV = rgb2hsv(img);
-    imtool(imgHSV)
+    %imtool(imgHSV)
     % Defining masks
     appleMask = zeros(size(imgHSV, 1), size(imgHSV, 2));
     bananaMask = zeros(size(imgHSV, 1), size(imgHSV, 2));
@@ -92,9 +92,8 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     orangeColor= imgHSV(:,:,1) >= 0.0409 & imgHSV(:,:,1) < .12;
     orangeSat = imgHSV(:,:,2) >= .68;
     orangeVal = imgHSV(:,:,3) >= .53 & imgHSV(:,:,3) <= 1;
-    yellowIGNORE = imgHSV(:,:,1) >=.12 & imgHSV(:,:,1) <= .15 & imgHSV(:,:,2) >=.82 & imgHSV(:,:,2) <= .95 & imgHSV(:,:,3) >=.5 &imgHSV(:,:,3) <=.7;
     
-    orangeMask((orangeColor) & orangeSat & orangeVal & ~finalBanana) = 1;
+    orangeMask((orangeColor) & orangeSat & orangeVal) = 1;
     
     % The orange that is green 
     greenishColor = imgHSV(:,:,1) >= .12 & imgHSV(:,:,1) <= .19;
