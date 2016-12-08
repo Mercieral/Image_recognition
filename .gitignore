@@ -1,0 +1,6 @@
+# ignore everything
+*
+
+# But not these items
+!.gitignore
+!FruitFinder/
