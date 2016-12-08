@@ -46,7 +46,7 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     
     %% Bananas
         
-    yellowHue = imgHSV(:,:,1) >= 0.125 & imgHSV(:,:,1) <= 0.50;
+    yellowHue = imgHSV(:,:,1) >= 0.125 & imgHSV(:,:,1) <= 0.30;
     yellowSat = imgHSV(:,:,2) >= 0.6 & imgHSV(:,:,2) <= 0.9;
     yellowVal = imgHSV(:,:,3) >= .2;
     bananaMask(yellowHue & yellowSat & yellowVal) = 1;
