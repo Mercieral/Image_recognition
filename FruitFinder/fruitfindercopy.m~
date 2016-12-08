@@ -19,23 +19,25 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     
     % Eroding all extra noise
     se = strel('square',2);
-    appleErode = imerode(appleMask, se);
-    appleErode2 = imerode(appleErode, se);
-    appleErode3 = imerode(appleErode2, se);
-    appleErode4 = imerode(appleErode3, se);
+    erodeApple = imerode(appleMask, se);
+    erodeApple2 = imerode(erodeApple, se);
+    erodeApple3 = imerode(erodeApple2, se);
+    erodeApple4 = imerode(erodeApple3, se);
+    imtool(erodeApple4)
     
     % Closing to get holes closed
     se = strel('disk',12);
-    appleClose = imclose(appleErode4, se);
+    appleClose = imclose(erodeApple4, se);
     
     %dilate to return apple to expected size
-    se = strel('disk',6);
+    se = strel('disk',2);
     appleDilate = imdilate(appleClose, se);
     
     % imtool(appleMask);
     % imtool(erodeApple);
     % imtool(appleClose);
     % imtool(appleDilate);
+    oppMask = zeros(size(imgHSV, 1), size(imgHSV, 2));
     newMaskCorrect = repmat(appleDilate, [1,1,3]) .* double(img);
     imgCheckApple = uint8(newMaskCorrect);
     imtool(imgCheckApple);
