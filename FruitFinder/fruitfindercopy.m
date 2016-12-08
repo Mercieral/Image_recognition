@@ -14,7 +14,7 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     % Finding locations
     upperRed = imgHSV(:,:,1) >= .8;
     lowerRed = imgHSV(:,:,1) <= .059;
-    redVal = imgHSV(:,:,3) >= .05 & imgHSV(:,:,3) <= .6;
+    redVal = imgHSV(:,:,3) >= .035 & imgHSV(:,:,3) <= .6;
     appleMask((upperRed | lowerRed) & redVal) = 1;
     
     % Eroding all extra noise
@@ -29,17 +29,17 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     appleClose = imclose(appleErode4, se);
     
     %dilate to return apple to expected size
-    se = strel('disk',6);
+    se = strel('disk',5);
     appleDilate = imdilate(appleClose, se);
     
     % imtool(appleMask);
     % imtool(erodeApple);
     % imtool(appleClose);
     % imtool(appleDilate);
-    newMaskCorrect = repmat(appleDilate, [1,1,3]) .* double(img);
-    imgCheckApple = uint8(newMaskCorrect);
-    imtool(imgCheckApple);
-    imtool(appleDilate);
+    % newMaskCorrect = repmat(appleDilate, [1,1,3]) .* double(img);
+    % imgCheckApple = uint8(newMaskCorrect);
+    % imtool(imgCheckApple);
+    % imtool(appleDilate);
     finalApple = appleDilate;
     
     %% Bananas
@@ -170,7 +170,7 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
         final(y-2:y+2, x-2:x+2, :) = 1;
     end
     
-    %imtool(masks)
-    %imtool(final)
+    imtool(masks)
+    imtool(final)
     
 end
