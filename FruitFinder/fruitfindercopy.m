@@ -109,8 +109,6 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
 
     centroids = zeros(size(appleMask));
     
-    sizes = '';
-    c = '';
     for i = 1:apples
         [row, col] = find(applesLabeled == i);
         [total, ~] = size(row);
@@ -150,15 +148,11 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
             x = round(sumx / total);
             y = round(sumy / total);
             centroids(y-3:y+3, x-3:x+3, :) = 1;
-            sizes = strcat(sizes, int2str(total), {', '});
-            c = strcat(c, '(', int2str(x), {', '}, int2str(y), {'), '});
         else
             oranges = oranges - 1;
             finalOrange(orangesLabeled == i) = 0;
         end
     end
-    sizes
-    c
     
     final(:,:,1) = finalApple;
     final(:,:,2) = finalBanana;
