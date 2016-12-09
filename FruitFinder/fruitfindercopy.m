@@ -2,9 +2,8 @@
 % CSSE463
 
 function [apples, bananas, oranges] = fruitfindercopy(img)
-    % imtool(img)
     imgHSV = rgb2hsv(img);
-    %imtool(imgHSV)
+
     % Defining masks
     appleMask = zeros(size(imgHSV, 1), size(imgHSV, 2));
     bananaMask = zeros(size(imgHSV, 1), size(imgHSV, 2));
@@ -19,12 +18,6 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     
     % Eroding all extra noise
     appleErode = medfilt2(appleMask, [15,15]);
-    %se = strel('square',2);
-    %appleErode = imerode(appleMask, se);
-    %appleErode2 = imerode(appleErode, se);
-    %appleErode3 = imerode(appleErode2, se);
-    %appleErode4 = imerode(appleErode3, se);
-    
     
     % Closing to get holes closed
     se = strel('disk',4);
@@ -33,15 +26,7 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     %dilate to return apple to expected size
     se = strel('disk',3);
     appleDilate = imdilate(appleClose, se);
-    
-    % imtool(appleMask);
-    % imtool(appleErode);
-    % imtool(appleClose);
-    % imtool(appleDilate);
-    % newMaskCorrect = repmat(appleDilate, [1,1,3]) .* double(img);
-    % imgCheckApple = uint8(newMaskCorrect);
-    % imtool(imgCheckApple);
-    % imtool(appleDilate);
+   
     finalApple = appleDilate;
     
     %% Bananas
@@ -50,9 +35,8 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     yellowSat = imgHSV(:,:,2) >= 0.6 & imgHSV(:,:,2) <= 0.9;
     yellowVal = imgHSV(:,:,3) >= .2;
     bananaMask(yellowHue & yellowSat & yellowVal) = 1;
-    
-    %imtool(bananaMask);
-    
+
+    %close initial gaps
     se = strel('square',3);
     fill = imclose(bananaMask, se);
     se = strel('square',6);
@@ -65,30 +49,21 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     erodeBanana2 = imerode(erodeBanana1, bigse);
     erodeBanana3 = imerode(erodeBanana2, littlese);
     erodeBanana4 = imerode(erodeBanana3, littlese);
-    %imtool(erodeBanana5)
-    
+
+    % close any remaining holes
     se = strel('square',3);
     closed1 = imclose(erodeBanana4, se);
-    se = strel('square',16);
+    se = strel('square',17);
     closed2 = imclose(closed1, se);
     
     % expand banana to original size-ish
     se = strel('disk',4);
     dilateBanana = imdilate(closed2, se);
     
-    
-    %imtool(dilateBanana);
-    
-    %newMaskCorrect = repmat(dilateBanana, [1,1,3]) .* double(img);
-    %imgCheckBanana = uint8(newMaskCorrect);
-    %imtool(imgCheckBanana);
-    
-    
     finalBanana = dilateBanana;
     
     %% Oranges
     % Finding locations
-        
     orangeColor= imgHSV(:,:,1) >= 0.0409 & imgHSV(:,:,1) < .12;
     orangeSat = imgHSV(:,:,2) >= .68;
     orangeVal = imgHSV(:,:,3) >= .53 & imgHSV(:,:,3) <= 1;
@@ -109,67 +84,89 @@ function [apples, bananas, oranges] = fruitfindercopy(img)
     se = strel('disk',7);
     orangeClose = imclose(erodeOrange, se);
     
-    % Opening to get rid of extra extra noise
-    se = strel('disk',1);
-    orangeOpen = imopen(orangeClose, se);
-    
     se = strel('disk',2);
-    orangeDilate = imdilate(orangeOpen, se);
-    
-%     newMaskCorrect = repmat(orangeDilate, [1,1,3]) .* double(img);
-%     imgCheckOrange = uint8(newMaskCorrect);
-%     imtool(rgb2hsv(imgCheckOrange));
-%     imtool(imgCheckOrange);
-    
-    finalOranges = orangeDilate;
+    orangeDilate = imdilate(orangeClose, se);
+
+    finalOrange = orangeDilate;
     
     
     %% End results
     applesLabeled = bwlabel(finalApple);
     bananasLabeled = bwlabel(finalBanana);
-    orangesLabeled = bwlabel(finalOranges);
+    orangesLabeled = bwlabel(finalOrange);
     
     apples = max(max(applesLabeled));
     bananas = max(max(bananasLabeled));
     oranges = max(max(orangesLabeled));
     
+    averageAppleSize = size(find(finalApple == 1), 1) / apples;
+    averageBananaSize = size(find(finalBanana == 1), 1) / bananas;
+    averageOrangeSize = size(find(finalOrange == 1), 1) / oranges;
+    
     masks(:,:,1) = appleMask;
     masks(:,:,2) = bananaMask;
     masks(:,:,3) = orangeMask;
 
-    final(:,:,1) = finalApple;
-    final(:,:,2) = finalBanana;
-    final(:,:,3) = finalOranges;
+    centroids = zeros(size(appleMask));
     
+    sizes = '';
+    c = '';
     for i = 1:apples
         [row, col] = find(applesLabeled == i);
         [total, ~] = size(row);
-        sumx = sum(col);
-        sumy = sum(row);
-        x = round(sumx / total);
-        y = round(sumy / total);
-        final(y-2:y+2, x-2:x+2, :) = 1;
+        if total > (averageAppleSize / 2)
+            sumx = sum(col);
+            sumy = sum(row);
+            x = round(sumx / total);
+            y = round(sumy / total);
+            centroids(y-3:y+3, x-3:x+3, :) = 1;
+        else
+            apples = apples - 1;
+            finalApple(applesLabeled == i) = 0;
+        end
     end
     
     for i = 1:bananas
         [row, col] = find(bananasLabeled == i);
         [total, ~] = size(row);
-        sumx = sum(col);
-        sumy = sum(row);
-        x = round(sumx / total);
-        y = round(sumy / total);
-        final(y-2:y+2, x-2:x+2, :) = 1;
+        if total > (averageBananaSize / 2)
+            sumx = sum(col);
+            sumy = sum(row);
+            x = round(sumx / total);
+            y = round(sumy / total);
+            centroids(y-3:y+3, x-3:x+3, :) = 1;
+        else
+            bananas = bananas - 1;
+            finalBanana(bananasLabeled == i) = 0;
+        end
     end
     
     for i = 1:oranges
         [row, col] = find(orangesLabeled == i);
         [total, ~] = size(row);
-        sumx = sum(col);
-        sumy = sum(row);
-        x = round(sumx / total);
-        y = round(sumy / total);
-        final(y-2:y+2, x-2:x+2, :) = 1;
+        if total > (averageOrangeSize / 2)
+            sumx = sum(col);
+            sumy = sum(row);
+            x = round(sumx / total);
+            y = round(sumy / total);
+            centroids(y-3:y+3, x-3:x+3, :) = 1;
+            sizes = strcat(sizes, int2str(total), {', '});
+            c = strcat(c, '(', int2str(x), {', '}, int2str(y), {'), '});
+        else
+            oranges = oranges - 1;
+            finalOrange(orangesLabeled == i) = 0;
+        end
     end
+    sizes
+    c
+    
+    final(:,:,1) = finalApple;
+    final(:,:,2) = finalBanana;
+    final(:,:,3) = finalOrange;
+    
+    centroids = repmat(centroids, 1, 1, 3);
+    
+    final(centroids == 1) = 1;
     
     imtool(masks)
     imtool(final)
