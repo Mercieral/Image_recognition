@@ -3,6 +3,8 @@ function circularities = shapeRecognizer(img)
     labeledShapes = bwlabel(img, 4);
     m = max(max(labeledShapes));
     %labeledShapes2 = labeledShapes .* (255/m);
+    %imshow(img, []);
+    %hold on;
     
     for i = 1:m
         disp('-----');
@@ -39,19 +41,28 @@ function circularities = shapeRecognizer(img)
         elog = sqrt(eigValMax/eigValMin);
         
         disp(['elog = ' num2str(elog) ]);
+        
+        perimeter = bwtraceboundary(img, [max(find(labeledShapes(:,min(c)) == i)) min(c)], 'NE');
+        %plot(perimeter(:,2), perimeter(:,1), 'g', 'LineWidth', 2);
+        psum = 1;
+        for j = 2:size(perimeter, 1)
+            previous = perimeter(j-1, :);
+            current = perimeter(j, :);
+            if previous(1) == current (1) | previous(2) == current(2)
+                psum = psum + 1;
+            else
+                psum = psum + sqrt(2);
+            end
+        end
+        
+        circularity = (psum ^ 2) / N;
+        disp(['Circularity = ' num2str(circularity)]);
+        
+        circularities(i) = circularity;
+        
         disp('-----');
-        
-        
-
-%         sumx = sum(col);
-%         sumy = sum(row);
-%         xbar = round(sumx / total);
-%         ybar = round(sumy / total);
-%         strcat(int2str(i), {' '}, '(', int2str(ybar), {', '}, int2str(xbar), {'), '})
-%         labeledShapes(ybar-3:ybar+3, xbar-3:xbar+3) = 0; 
     end
     
     % imtool(labeledShapes)
     
-    circularities = 0;
 end
