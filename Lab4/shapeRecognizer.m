@@ -32,17 +32,13 @@ function circularities = shapeRecognizer(img)
         m(2,2) = rSumSquared/ N;
         
         values = eig(m);
-        % disp('-----');
-        % disp('Centroid Location');
-        % disp(['(' num2str(cMean) ', ' num2str(rMean) ')']);
-        % disp('-----');
         eigValMin = min(values);
         eigValMax = max(values);
         elog = sqrt(eigValMax/eigValMin);
         
         disp(['elog = ' num2str(elog) ]);
         
-        perimeter = bwtraceboundary(img, [max(find(labeledShapes(:,min(c)) == i)) min(c)], 'NE');
+        perimeter = bwtraceboundary(img, [max(find(labeledShapes(:,min(c)) == i)), min(c)], 'NE');
         %plot(perimeter(:,2), perimeter(:,1), 'g', 'LineWidth', 2);
         psum = 1;
         for j = 2:size(perimeter, 1)
@@ -56,8 +52,19 @@ function circularities = shapeRecognizer(img)
         end
         
         circularity = (psum ^ 2) / N;
-        disp(['Circularity = ' num2str(circularity)]);
         
+        type = '';
+        if circularity >= 15 & elog >= 1 & elog <= 1.5 
+            type = 'Square';
+        elseif circularity < 15 & elog >= 1 & elog <= 1.5
+            type = 'Circle';
+        elseif circularity <= 4.2336*elog + 8.2 & elog > 1.5
+            type = 'Ellipses';
+        else 
+            type = 'Rectangle';
+        end
+        
+        disp(['Circularity = ' num2str(circularity) ' Centroid= (' num2str(cMean) ', ' num2str(rMean) ') Shape= ' type]);
         circularities(i) = circularity;
         
         disp('-----');
