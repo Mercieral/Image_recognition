@@ -36,8 +36,8 @@ function circularities = shapeRecognizer(img)
         elog = sqrt(eigValMax/eigValMin);
         
         %% Trace the perimter and find the length 
-        perimeter = bwtraceboundary(img, [max(labeledShapes(labeledShapes(:,min(c)) == i)), min(c)], 'NE');
-        %plot(perimeter(:,2), perimeter(:,1), 'g', 'LineWidth', 2);
+        perimeter = bwtraceboundary(img, [max(find(labeledShapes(:,min(c)) == i)), min(c)], 'NE');
+        %plot(perimeter(:,2), perimeter(:,1), 'r', 'LineWidth', 2);
         psum = 1;
         for j = 2:size(perimeter, 1)
             previous = perimeter(j-1, :);
