@@ -1,5 +1,6 @@
 % toyProblem.m
 % Written by Matthew Boutell, 2006.
+% Modified by Aaron Mercier and Larry Gates
 % Feel free to distribute at will.
 
 clear all;
@@ -20,9 +21,36 @@ seedTest = 138;
 % KNOWN ISSUE: the linear decision boundary doesn't work 
 % for this data set at all. Don't know why...
 
+net = svm(size(xTrain, 2), 'rbf', (8), 100);
+net = svmtrain(net, xTrain, yTrain);
+
 
 % Run this on a trained network to see the resulting boundary 
 % (as in the demo)
-plotBoundary(net, [0,20], [0,20]);
+%plotboundary(net, [0,20], [0,20]);
+
+
+
+%netTest = svm(size(xTest, 2), 'rbf', (8), 100);
+%netTest = svmtrain(netTest, xTest, yTest);
+[classes, dist] = svmfwd(net, xTest);
+results = [];
+for i = 1:length(yTest)
+    %fprintf('Point %d, True class: %d, detected class: %d, Correct: %d, distance: %0.2f\n', i, yTest(i), classes(i),yTest(i) == classes(i), dist(i));
+    results = [i, yTest(i), classes(i),yTest(i) == classes(i), dist(i); results];
+end
+
+trueNeg = size(results(results(:,4) == 1 & results(:,2) == -1),1);
+truePos = size(results(results(:,4) == 1 & results(:,2) == 1), 1);
+falsePos = size(results(results(:,3) == 1 & results(:,2) == -1),1);
+falseNeg = size(results(results(:,3) == -1 & results(:,2) == 1),1);
+accuracy = (truePos + trueNeg) / (truePos + trueNeg + falsePos + falseNeg);
+TPR = truePos/ (truePos + falseNeg);
+precision = truePos / (truePos + falsePos);
+FPR = falsePos / (falsePos + trueNeg);
+
+plotboundary(net, [0,20], [0,20]);
+
+
 
 
