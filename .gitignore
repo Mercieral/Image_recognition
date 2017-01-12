@@ -16,5 +16,7 @@
 !Lab5/*
 !Lab6/*
 !SunsetDetector/*
+!SunsetDetector/*/*
+!SunsetDetector/*/*/*
 
 Lab3/.DS_Store
