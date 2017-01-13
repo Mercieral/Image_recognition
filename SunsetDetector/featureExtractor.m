@@ -31,19 +31,18 @@ function featureVector = featureExtractor(img)
             [ccL, ccS, ccT] = unscaledColorConv(currentCellRed, currentCellGreen, currentCellBlue);
             
             
-            
             %Store values in the output TODO
             % L
             featureVector(startingIndex) = mean2(ccL);       % mean of L at ij
-            featureVector(startingIndex + 1) = 0;   % standard deviation of L at ij
+            featureVector(startingIndex + 1) = std2(ccL);   % standard deviation of L at ij
             
             % S
             featureVector(startingIndex + 2) = mean2(ccS);   % mean of S at ij
-            featureVector(startingIndex + 3) = 0;   % standard deviation of S at ij
+            featureVector(startingIndex + 3) = std2(ccS);   % standard deviation of S at ij
             
             % T
             featureVector(startingIndex + 4) = mean2(ccT);   % mean of T at ij
-            featureVector(startingIndex + 5) = 0;   % standard deviation of T at ij
+            featureVector(startingIndex + 5) = std2(ccT);   % standard deviation of T at ij
         end
     end
     
