@@ -24,19 +24,34 @@ function featureVector = featureExtractor(img)
             %calculate following values from cells{i,j}
             %TODO
             
+            currentCell = cells{i,j};
+            currentCellRed = currentCell(:,:,1);
+            currentCellGreen = currentCell(:,:,2);
+            currentCellBlue = currentCell(:,:,3);
+            [ccL, ccS, ccT] = unscaledColorConv(currentCellRed, currentCellGreen, currentCellBlue);
+            
+            
+            
             %Store values in the output TODO
             % L
-            featureVector(startingIndex) = 0;       % mean of L at ij
+            featureVector(startingIndex) = mean2(ccL);       % mean of L at ij
             featureVector(startingIndex + 1) = 0;   % standard deviation of L at ij
             
             % S
-            featureVector(startingIndex + 2) = 0;   % mean of S at ij
+            featureVector(startingIndex + 2) = mean2(ccS);   % mean of S at ij
             featureVector(startingIndex + 3) = 0;   % standard deviation of S at ij
             
             % T
-            featureVector(startingIndex + 4) = 0;   % mean of T at ij
+            featureVector(startingIndex + 4) = mean2(ccT);   % mean of T at ij
             featureVector(startingIndex + 5) = 0;   % standard deviation of T at ij
         end
     end
     
+end
+
+function [L, S, T] = unscaledColorConv(red, green, blue)
+    L = red + green + blue;
+    S = red - green;
+    T = red - 2*green + blue;
+
 end
