@@ -5,9 +5,12 @@ subdir = 'TrainSunset';
 fileList = dir(subdir);
 % files 1 and 2 are . (current dir) and .. (parent dir), respectively, 
 % so we start with 3.
+count = 0;
 for i = 3:size(fileList)
     img = imread([subdir  '/'  fileList(i).name]);
+    count = count + 1;
     % TODO: insert code of function call here to operate on image.
     % Hint: debug the loop body on 1-2 images BEFORE looping over lots of them...
 end
+count
 
