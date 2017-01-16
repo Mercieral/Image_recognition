@@ -1,4 +1,4 @@
-function [ trueNeg, truePos, falsePos, falseNeg, accuracy, TPR, precision, FPR ] = errorMeasurer( norm, outcome, outcomeTest, sigma, cp )
+function [ trueNeg, truePos, falsePos, falseNeg, accuracy, TPR, precision, FPR, net ] = errorMeasurer( norm, outcome, outcomeTest, sigma, cp )
     % Calculates the error measurements for a given set. 
     % Given a stucture, true outcomes for the training, and the correct 
     % outcomes for the tests, kernal parameter (sigma), and additional 

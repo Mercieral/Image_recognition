@@ -51,16 +51,16 @@ end
 % TODO
 
 
-sigmaList = 5:5:100;
-cpList = 10:10:400;
+sigmaList = .1:.5:17;
+cpList = 10:5:100;
 
 expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR'];
 
 
 for i = 1:size(sigmaList,2)
     for j = 1:size(cpList,2)
-        [tn, tp, fp, fn, ac, TPR, p, FPR] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(j));
-        expResults = [expResults; sigmaList(i) cpList(j) tn tp fp fn ac TPR p FPR;]; %#ok<AGROW>
+        [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(j));
+        expResults = [expResults; sigmaList(i) cpList(j) tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
     end
 end
 
@@ -79,5 +79,7 @@ end
 r_out = r_out(1:end-1);
 
 
-printmat(expResults, 'Experiment Results', r_out, 'Sigma C TrueNeg TruePos FalsePos FalseNeg Acc TPR Prec. FPR')
+printmat(expResults, 'Experiment Results', r_out, 'Sigma C TrueNeg TruePos FalsePos FalseNeg Acc TPR Prec. FPR SV')
+
+% find(max(expResults(find(expResults(:,11) < 250),7))==expResults(:,7))
 
