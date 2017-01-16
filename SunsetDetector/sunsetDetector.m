@@ -52,14 +52,16 @@ end
 
 
 sigmaList = 5:5:100;
-cpList = [50];
+cpList = 10:10:400;
 
 expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR'];
 
 
 for i = 1:size(sigmaList,2)
-    [tn, tp, fp, fn, ac, TPR, p, FPR] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(1));
-    expResults = [expResults; sigmaList(i) cpList(1) tn tp fp fn ac TPR p FPR;]; %#ok<AGROW>
+    for j = 1:size(cpList,2)
+        [tn, tp, fp, fn, ac, TPR, p, FPR] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(j));
+        expResults = [expResults; sigmaList(i) cpList(j) tn tp fp fn ac TPR p FPR;]; %#ok<AGROW>
+    end
 end
 
 
