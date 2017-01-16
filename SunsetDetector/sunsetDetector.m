@@ -51,15 +51,15 @@ end
 % TODO
 
 
-sigmaList = [20 40 60];
-cpList = [100 200 300];
+sigmaList = 5:5:100;
+cpList = [50];
 
 expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR'];
 
 
 for i = 1:size(sigmaList,2)
-    [tn, tp, fp, fn, ac, TPR, p, FPR] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(i));
-    expResults = [expResults; sigmaList(i) cpList(i) tn tp fp fn ac TPR p FPR;]; %#ok<AGROW>
+    [tn, tp, fp, fn, ac, TPR, p, FPR] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(1));
+    expResults = [expResults; sigmaList(i) cpList(1) tn tp fp fn ac TPR p FPR;]; %#ok<AGROW>
 end
 
 
