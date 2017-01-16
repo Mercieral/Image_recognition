@@ -11,11 +11,7 @@ subdirs = {subdir1, subdir2, subdir3, subdir4, subdir5, subdir6};
 fileLists = {dir(subdir1), dir(subdir2), dir(subdir3), dir(subdir4), dir(subdir5), dir(subdir6)};
 trainingCount = trainingCount + size(fileLists{1},1)- 4 + size(fileLists{2},1);
 outcome = [ones(size(fileLists{1},1)-2,1); ones(size(fileLists{2},1)-2, 1)*-1];
-outcomeTest = [
-    ones(size(fileLists{3},1)-2,1);
-    ones(size(fileLists{4},1)-2,1)*-1;
-    ones(size(fileLists{5},1)-2,1);
-    ones(size(fileLists{6},1)-2,1)*-1];
+outcomeTest = [ones(size(fileLists{3},1)-2,1);ones(size(fileLists{4},1)-2,1)*-1;ones(size(fileLists{5},1)-2,1);ones(size(fileLists{6},1)-2,1)*-1];
 
 if exist(featureFilename, 'file')
     norm = load(featureFilename, 'norm');
@@ -50,6 +46,9 @@ end
 % Train svm with only the training sets from norm
 % TODO
 
+% The total number of cells that need to be trained with are in
+% trainingCount 
+
 
 sigmaList = [20 40 60];
 cpList = [100 200 300];
@@ -62,20 +61,8 @@ for i = 1:size(sigmaList,2)
     expResults = [expResults; sigmaList(i) cpList(i) tn tp fp fn ac TPR p FPR;]; %#ok<AGROW>
 end
 
-
-%%% Making row labels
 for i=1:size(expResults,1)
-    row{i} = ['ROW ' num2str(i)]; %#ok<SAGROW>
-end
+    ropw
 
-row_labels = reshape(row, 1, length(row));
-rows = strrep(row_labels, ' ', '_');
-r_out = [];
-for n = 1:length(rows)
-    r_out = [r_out, rows{n}, ' ']; %#ok<AGROW>
-end 
-r_out = r_out(1:end-1);
-
-
-printmat(expResults, 'Experiment Results', r_out, 'Sigma C TrueNeg TruePos FalsePos FalseNeg Acc TPR Prec. FPR')
+printmat(expResults, 'Experiment Results', '', 'Sigma C TrueNeg TruePos FalsePos FalseNeg Acc TPR Prec. FPR')
 
