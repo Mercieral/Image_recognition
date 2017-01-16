@@ -130,7 +130,7 @@ fprintf('\n\n\n\n');
 disp('Adding the new point X12 has lead to a more difficult data set');
 disp('that can no longer be separated by a simple linear kernel.');
 disp('We can now switch to a more powerful kernel function, namely');
-disp('the Radial Basis Function (R  BF) kernel.');
+disp('the Radial Basis Function (RBF) kernel.');
 disp(' ')
 disp('The RBF kernel has an associated parameter, the kernel width.');
 disp('We will now show the decision boundary obtained from a SVM with');

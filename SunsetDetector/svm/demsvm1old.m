@@ -42,7 +42,7 @@ plotdata(X, Y, x1ran, x2ran);
 title('Data from class +1 (squares) and class -1 (crosses)');
 
 fprintf('\n\n\n\n');
-fprintf('The data is plotted in figure %i, where\n', f1.Number);
+fprintf('The data is plotted in figure %i, where\n', f1);
 disp('  squares stand for points with label Yi = +1');
 disp('  crosses stand for points with label Yi = -1');
 disp(' ')
@@ -71,7 +71,7 @@ title(['SVM with linear kernel: decision boundary (black) plus Support' ...
        ' Vectors (red)']);
 
 fprintf('\n\n\n\n');
-fprintf('The resulting decision boundary is plotted in figure %i.\n', f2.Number);
+fprintf('The resulting decision boundary is plotted in figure %i.\n', f2);
 disp('The contour plotted in black separates class +1 from class -1');
 disp('(this is the actual decision boundary)');
 disp('The contour plotted in red are the points at distance +1 from the');
@@ -115,7 +115,7 @@ disp('allowing training points to be misclassified.');
 disp(' ');
 disp('Training the SVM on this modified data set we see that the points');
 disp('X5, X11 and X12 can not be correctly classified. The decision');
-fprintf('boundary is shown in figure %i.\n', f3.Number);
+fprintf('boundary is shown in figure %i.\n', f3);
 disp('The coefficients alpha associated with each example are');
 ind = [1:length(Y)]';
 fprintf('  Example %2i: alpha%2i = %5.2f\n', [ind, ind, net.alpha]');
@@ -130,7 +130,7 @@ fprintf('\n\n\n\n');
 disp('Adding the new point X12 has lead to a more difficult data set');
 disp('that can no longer be separated by a simple linear kernel.');
 disp('We can now switch to a more powerful kernel function, namely');
-disp('the Radial Basis Function (R  BF) kernel.');
+disp('the Radial Basis Function (RBF) kernel.');
 disp(' ')
 disp('The RBF kernel has an associated parameter, the kernel width.');
 disp('We will now show the decision boundary obtained from a SVM with');
@@ -151,7 +151,7 @@ title(['SVM with RBF kernel, width 8: decision boundary (black)' ...
 
 fprintf('\n\n\n\n');
 fprintf('Figure %i shows the decision boundary obtained from a SVM\n', ...
-	f4.Number);
+	f4);
 disp('with Radial Basis Function kernel, the kernel width has been');
 disp('set to 8.');
 disp('The SVM now interprets the new point X12 as evidence for a');
@@ -174,7 +174,7 @@ title(['SVM with RBF kernel, width 1: decision boundary (black)' ...
 
 fprintf('\n\n\n\n');
 fprintf('Figure %i shows the decision boundary obtained from a SVM\n', ...
-	f5.Number);
+	f5);
 disp('with radial basis function kernel, kernel width 1.');
 disp('The decision boundary is now highly shattered, since a smaller');
 disp('kernel width allows the decision boundary to be more curved.');
@@ -195,10 +195,10 @@ title(['SVM with RBF kernel, width 36: decision boundary (black)' ...
 
 fprintf('\n\n\n\n');
 fprintf('Figure %i shows the decision boundary obtained from a SVM\n', ...
-	f6.Number);
+	f6);
 disp('with radial basis function kernel, kernel width 36.');
 disp('This gives a decision boundary similar to the one shown in');
-fprintf('Figure %i for the SVM with linear kernel.\n', f2.Number);
+fprintf('Figure %i for the SVM with linear kernel.\n', f2);
 
 
 fprintf('\n\n\n\n');
