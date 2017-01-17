@@ -1,4 +1,4 @@
-function featureVector = featureExtractor(img)
+function featureVector = featureExtractor(img, lW, sW, tW)
     
     [rowLength, colLength, ~] = size(img);
     
@@ -28,7 +28,7 @@ function featureVector = featureExtractor(img)
             currentCellRed = currentCell(:,:,1);
             currentCellGreen = currentCell(:,:,2);
             currentCellBlue = currentCell(:,:,3);
-            [ccL, ccS, ccT] = unscaledColorConv(double(currentCellRed), double(currentCellGreen), double(currentCellBlue));
+            [ccL, ccS, ccT] = unscaledColorConv(double(currentCellRed), double(currentCellGreen), double(currentCellBlue), lW, sW, tW);
             
             
             %Store values in the output TODO
@@ -48,10 +48,13 @@ function featureVector = featureExtractor(img)
     
 end
 
-function [L, S, T] = unscaledColorConv(red, green, blue)
+function [L, S, T] = unscaledColorConv(red, green, blue, lF, sF, tF)
     % Taken from specificaton
     L = red + green + blue;
     S = red - blue;
     T = red - 2*green + blue;
+    L = L .* lF;
+    S = S .* sF;
+    T = T .* tF;
 
 end

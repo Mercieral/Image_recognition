@@ -1,3 +1,5 @@
+addpath(genpath(pwd)) 
+
 featureFilename = 'feature.mat';
 trainingCount = 0;
 subdir1 = 'sunsetDetectorImages/TrainSunset';
@@ -17,6 +19,10 @@ outcomeTest = [
     ones(size(fileLists{5},1)-2,1);
     ones(size(fileLists{6},1)-2,1)*-1];
 
+lWeight = 1;
+sWeight = 1;
+tWeight = 1;
+
 if exist(featureFilename, 'file')
     norm = load(featureFilename, 'norm');
 else
@@ -31,7 +37,7 @@ else
             %if count < 10
                 count = count + 1;
                 img = imread([subdirs{i} '/'  fileLists{i}(j).name]);
-                extractedFeatures = featureExtractor(img);
+                extractedFeatures = featureExtractor(img, lWeight, sWeight, tWeight);
                 features(count,:) = extractedFeatures(:,1);
             %end
         end
