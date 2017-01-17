@@ -21,9 +21,10 @@ outcomeTest = [
 
 lWeight = 1;
 sWeight = 1;
-tWeight = 1;
+tWeight = 100;
 
 if exist(featureFilename, 'file')
+    disp('If changing the weights, you must delete the file "feature.mat"');
     norm = load(featureFilename, 'norm');
 else
     % preallocate memory to prevent inefficient reallocation at each iteration.
@@ -44,7 +45,7 @@ else
     end
 
     features = features(1:count, 1:294);
-    size(features)
+    size(features);
 
     norm = normalizeFeatures01(features); %#ok<NASGU>
 
