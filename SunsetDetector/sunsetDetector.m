@@ -47,23 +47,25 @@ else
     norm = load(featureFilename, 'norm');
 end
 
-% Train svm with only the training sets from norm
-% TODO
-
-
-sigmaList = .1:.5:17;
-cpList = 10:5:100;
-
 expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR'];
 
+% To determine optimal sigma/c parameters for svm
+%sigmaList = .1:.5:17;
+%cpList = 10:5:100;
+%for i = 1:size(sigmaList,2)
+%    for j = 1:size(cpList,2)
+%        [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(j), 0);
+%        expResults = [expResults; sigmaList(i) cpList(j) tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
+%    end
+%end
 
-for i = 1:size(sigmaList,2)
-    for j = 1:size(cpList,2)
-        [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(j));
-        expResults = [expResults; sigmaList(i) cpList(j) tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
-    end
+% Use optimal sigma/c parameters to test different threshold levels and
+% display ROC curve
+for threshold = -4:0.1:4
+    [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm, outcome, outcomeTest, 0.1, 20, threshold);
+    expResults = [expResults; 0.1 20 tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
 end
-
+rocGenerator(expResults(:,8), expResults(:,10));
 
 %%% Making row labels
 for i=1:size(expResults,1)
@@ -77,7 +79,6 @@ for n = 1:length(rows)
     r_out = [r_out, rows{n}, ' ']; %#ok<AGROW>
 end 
 r_out = r_out(1:end-1);
-
 
 printmat(expResults, 'Experiment Results', r_out, 'Sigma C TrueNeg TruePos FalsePos FalseNeg Acc TPR Prec. FPR SV')
 
