@@ -6,9 +6,9 @@ function [ trueNeg, truePos, falsePos, falseNeg, accuracy, TPR, precision, FPR, 
     % positive, false positive, false negative, accuracy, true positive
     % ration, precision, and false positive ratio.
     
-    net = svm(size(norm.norm, 2), 'rbf', [sigma], cp);
-    net = svmtrain(net, norm.norm(1:size(outcome,1),:), outcome); %#ok<SVMTRAIN>
-    [classes, dist] = svmfwd(net, norm.norm(size(outcome,1)+1:size(norm.norm,1),:));
+    net = svm(size(norm, 2), 'rbf', [sigma], cp);
+    net = svmtrain(net, norm(1:size(outcome,1),:), outcome); %#ok<SVMTRAIN>
+    [classes, dist] = svmfwd(net, norm(size(outcome,1)+1:size(norm,1),:));
     results = [];  
     
     %print max and min distances to get threshold ranges
