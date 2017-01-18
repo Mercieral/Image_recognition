@@ -19,9 +19,9 @@ outcomeTest = [
     ones(size(fileLists{5},1)-2,1);
     ones(size(fileLists{6},1)-2,1)*-1];
 
-lWeight = 1;
-sWeight = 1;
-tWeight = 100;
+lWeight = 100000;
+sWeight = .0000000000001;
+tWeight = .0000000000001;
 
 if exist(featureFilename, 'file')
     disp('If changing the weights, you must delete the file "feature.mat"');
@@ -57,17 +57,17 @@ end
 expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR'];
 
 % To determine optimal sigma/c parameters for svm
-%sigmaList = .1:.5:17;
-%cpList = 10:5:100;
-%for i = 1:size(sigmaList,2)
+% sigmaList = .1:.5:17;
+% cpList = 10:5:100;
+% for i = 1:size(sigmaList,2)
 %    for j = 1:size(cpList,2)
 %        [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm, outcome, outcomeTest, sigmaList(i), cpList(j), 0);
 %        expResults = [expResults; sigmaList(i) cpList(j) tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
 %    end
-%end
+% end
 
 % Use optimal sigma/c parameters to test different threshold levels and
-% display ROC curve
+display ROC curve
 for threshold = -4:0.1:4
     [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm, outcome, outcomeTest, 0.1, 20, threshold);
     expResults = [expResults; 0.1 20 tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
