@@ -24,12 +24,6 @@ function [ trueNeg, truePos, falsePos, falseNeg, accuracy, TPR, precision, FPR, 
         results = [i, outcomeTest(i), classes(i), checkThreshold, outcomeTest(i)==classes(i), outcomeTest(i)==checkThreshold;results]; %#ok<AGROW>
 
     end
-
-    %Using threshold of 0
-    %trueNeg = size(results(results(:,5) == 1 & results(:,2) == -1),1);
-    %truePos = size(results(results(:,5) == 1 & results(:,2) == 1), 1);
-    %falsePos = size(results(results(:,3) == 1 & results(:,2) == -1),1);
-    %falseNeg = size(results(results(:,3) == -1 & results(:,2) == 1),1);
     
     %using dynamic threshold
     trueNeg = size(results(results(:,6) == 1 & results(:,2) == -1),1);

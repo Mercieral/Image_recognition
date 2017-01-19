@@ -31,7 +31,7 @@ function featureVector = featureExtractor(img, lW, sW, tW)
             [ccL, ccS, ccT] = unscaledColorConv(double(currentCellRed), double(currentCellGreen), double(currentCellBlue), lW, sW, tW);
             
             
-            %Store values in the output TODO
+            %Store values in the output
             % L
             featureVector(startingIndex) = mean2(ccL);       % mean of L at ij
             featureVector(startingIndex + 1) = std2(ccL);   % standard deviation of L at ij
@@ -53,6 +53,8 @@ function [L, S, T] = unscaledColorConv(red, green, blue, lF, sF, tF)
     L = red + green + blue;
     S = red - blue;
     T = red - 2*green + blue;
+    
+    % weight the bands
     L = L .* lF;
     S = S .* sF;
     T = T .* tF;

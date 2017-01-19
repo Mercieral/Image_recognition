@@ -17,12 +17,10 @@ function norm = imageExtractor(fileLists, subdirs, lWeight, sWeight, tWeight)
     count = 0;
     for i = 1:size(fileLists, 2)
         for j = 3:size(fileLists{i})
-            %if count < 10
-                count = count + 1;
-                img = imread([subdirs{i} '/'  fileLists{i}(j).name]);
-                extractedFeatures = featureExtractor(img, lWeight, sWeight, tWeight);
-                features(count,:) = extractedFeatures(:,1);
-            %end
+            count = count + 1;
+            img = imread([subdirs{i} '/'  fileLists{i}(j).name]);
+            extractedFeatures = featureExtractor(img, lWeight, sWeight, tWeight);
+            features(count,:) = extractedFeatures(:,1);
         end
     end
 
