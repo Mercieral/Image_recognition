@@ -19,14 +19,18 @@ outcomeTest = [
     ones(size(fileLists{5},1)-2,1);
     ones(size(fileLists{6},1)-2,1)*-1];
 
-lWeight = 100000;
-sWeight = .0000000000001;
-tWeight = .0000000000001;
+lWeights = [1 1 1 1 1 1 2 100 1000 .0000000001 .01 .001 .01 .001 .5 .25];
+sWeights = [1 1 1 .0000000001 .5 .25 2 .01 .001 1 100 1000 .01 .001 .5 .25];
+tWeights = [1 100 .0000000001 1 .5 .25 2 .01 1000 1 .01 1000 100 1000 .5 .25];
+% norm = zeros(size(lWeights,1), 1);
 
+if (size(lWeights) ~= size(sWeights)) & (size(lWeights) ~= size(tWeights))
+    return
+end 
 
-norm = imageExtractor(fileLists, subdirs, lWeight, sWeight, tWeight);
-
-expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR'];
+for i = 1:size(lWeights,2)
+    norm{i} = imageExtractor(fileLists, subdirs, lWeights(i), sWeights(i), tWeights(i));
+end
 
 % To determine optimal sigma/c parameters for svm
 % sigmaList = .1:.5:17;
@@ -39,13 +43,19 @@ expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' '
 % end
 
 % Use optimal sigma/c parameters to test different threshold levels and
-%display ROC curve
-for threshold = -4:0.1:4
-    [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm, outcome, outcomeTest, 0.1, 20, threshold);
-    expResults = [expResults; 0.1 20 tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
+% display ROC curve
+figure;
+hold on;
+lineColors = ['y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' ];
+pointColors = ['yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' ];
+for i = 1:size(lWeights,2)
+    expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR'];
+    for threshold = -4:0.1:4
+        [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm{i}, outcome, outcomeTest, 0.1, 20, threshold);
+        expResults = [expResults; 0.1 20 tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
+    end
+    rocGenerator(lineColors(max(mod(i, size(lWeights,2)),1)), pointColors(max(mod(i, size(lWeights,2)),1)), expResults(:,8), expResults(:,10));
 end
-rocGenerator(expResults(:,8), expResults(:,10));
-
 %displayResults(expResults);
 
 

@@ -1,9 +1,6 @@
-function rocGenerator(truePos, falsePos)
-
-    figure;
-    hold on;
-    plot(falsePos, truePos, 'b-', 'LineWidth', 2);
-    plot(falsePos, truePos, 'bo', 'MarkerSize', 6, 'LineWidth', 2);
+function rocGenerator(lineColor, pointColor, truePos, falsePos)
+    plot(falsePos, truePos, lineColor, 'LineWidth', 2);
+    plot(falsePos, truePos, pointColor, 'MarkerSize', 6, 'LineWidth', 2);
     
     % You could repeat here with a different color/style if you made 
     % an enhancement and wanted to show that it outperformed the baseline.
