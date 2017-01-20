@@ -19,7 +19,7 @@ function norm = imageExtractor(fileLists, subdirs, lWeight, sWeight, tWeight)
         for j = 3:size(fileLists{i})
             count = count + 1;
             img = imread([subdirs{i} '/'  fileLists{i}(j).name]);
-            extractedFeatures = featureExtractor(img, lWeight, sWeight, tWeight);
+            extractedFeatures = featureExtractor(img);
             features(count,:) = extractedFeatures(:,1);
         end
     end
@@ -27,7 +27,7 @@ function norm = imageExtractor(fileLists, subdirs, lWeight, sWeight, tWeight)
     features = features(1:count, 1:294);
     size(features);
 
-    norm = normalizeFeatures01(features); 
+    norm = normalizeFeatures01(features, lWeight, sWeight, tWeight); 
 
     %     save(featureFilename, 'norm');
     %     norm = load(featureFilename, 'norm');

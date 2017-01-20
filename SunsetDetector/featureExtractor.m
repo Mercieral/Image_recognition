@@ -1,4 +1,4 @@
-function featureVector = featureExtractor(img, lW, sW, tW)
+function featureVector = featureExtractor(img)
     
     [rowLength, colLength, ~] = size(img);
     
@@ -28,7 +28,7 @@ function featureVector = featureExtractor(img, lW, sW, tW)
             currentCellRed = currentCell(:,:,1);
             currentCellGreen = currentCell(:,:,2);
             currentCellBlue = currentCell(:,:,3);
-            [ccL, ccS, ccT] = unscaledColorConv(double(currentCellRed), double(currentCellGreen), double(currentCellBlue), lW, sW, tW);
+            [ccL, ccS, ccT] = unscaledColorConv(double(currentCellRed), double(currentCellGreen), double(currentCellBlue));
             
             
             %Store values in the output
@@ -48,15 +48,10 @@ function featureVector = featureExtractor(img, lW, sW, tW)
     
 end
 
-function [L, S, T] = unscaledColorConv(red, green, blue, lF, sF, tF)
+function [L, S, T] = unscaledColorConv(red, green, blue)
     % Taken from specificaton
     L = red + green + blue;
     S = red - blue;
     T = red - 2*green + blue;
-    
-    % weight the bands
-    L = L .* lF;
-    S = S .* sF;
-    T = T .* tF;
 
 end

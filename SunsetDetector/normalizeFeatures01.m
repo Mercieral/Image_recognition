@@ -4,7 +4,7 @@
 
 % The data is assumed to be in the the format specified in the paper.
 % Features is a N x 294 matrix, where N is the number of images.
-function features = normalizeFeatures01(features)
+function features = normalizeFeatures01(features, lWeight, sWeight, tWeight)
 
 nFeatures = size(features, 2); % 294
 
@@ -20,6 +20,16 @@ for selectedType = 1:6
     maxValue = max(max(selectedFeature));
     selectedFeature = selectedFeature / maxValue;
  
+    % Weighting values
+    if selectedType < 3
+        selectedFeature = selectedFeature .* lWeight;
+    elseif selectedType < 5
+        selectedFeature = selectedFeature .* sWeight;
+    else
+        selectedFeature = selectedFeature .* tWeight;
+    end
+    
+    
     % We could have combined: f = (f-min)/(max-min)
     
     % Re-insert into the feature matrix
