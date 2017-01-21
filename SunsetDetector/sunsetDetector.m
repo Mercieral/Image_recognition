@@ -22,9 +22,9 @@ outcomeTest = [
 lWeights = [1];
 sWeights = [1];
 tWeights = [1];
-% lWeights = [1 1 1 1 1 1 2 100 1000 .0000000001 .01 .001 .01 .001 .5 .25];
-% sWeights = [1 1 1 .0000000001 .5 .25 2 .01 .001 1 100 1000 .01 .001 .5 .25];
-% tWeights = [1 100 .0000000001 1 .5 .25 2 .01 1000 1 .01 1000 100 1000 .5 .25];
+% lWeights = [1 2 100 .25 1   1   100 1 1 0 1 0 0];
+% sWeights = [1 2 100 .25 1   100 1   1 0 1 0 1 0];
+% tWeights = [1 2 100 .25 100 1   1   0 1 1 0 0 1];
 
 if (size(lWeights) ~= size(sWeights)) & (size(lWeights) ~= size(tWeights))
     return
@@ -49,19 +49,18 @@ end
 %%% Use optimal sigma/c parameters to test different threshold levels and
 %%% weights of the color bands and display the ROC curve. WARNING this
 %%% takes a long time
-% figure;
-% hold on;
-% lineColors = ['y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'w-' 'k-' ];
-% pointColors = ['yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'wo' 'ko' ];
-% for i = 1:size(lWeights,2)
-%     expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR' '#sv'];
-%     for threshold = -4:0.1:4
-%         [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm{i}, outcome, outcomeTest, 0.1, 20, threshold);
-%         expResults = [expResults; 0.1 20 tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
-%     end
-%     rocGenerator(lineColors(max(mod(i, size(lWeights,2)),1)), pointColors(max(mod(i, size(lWeights,2)),1)), expResults(:,8), expResults(:,10));
-% end
-% displayResults(expResults);
+figure;
+hold on;
+lineColors = {'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'k-' 'y-' 'm-' 'c-' 'r-' 'g-' 'b-' 'k-' };
+pointColors = {'yo' 'mo' 'co' 'ro' 'go' 'bo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'ko' 'yo' 'mo' 'co' 'ro' 'go' 'bo' 'ko' };
+for i = 1:size(lWeights,2)
+    expResults = []; %['Sigma' 'C' 'TrueNeg' 'TruePos' 'FalsePos' 'FalseNeg' 'Acc' 'TPR' 'Prec.' 'FPR' '#sv'];
+    for threshold = -4:0.1:4
+        [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm{i}, outcome, outcomeTest, 0.1, 20, threshold);
+        expResults = [expResults; 0.1 20 tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
+    end
+    rocGenerator(lineColors{max(mod(i, size(lWeights,2)),1)}, pointColors{max(mod(i, size(lWeights,2)),1)}, expResults(:,8), expResults(:,10), 'Performance when Varying Weights');
+end
 
 %%% Use optimal sigma/c parameters to test different threshold levels and display ROC curve
 figure;
@@ -71,4 +70,4 @@ for threshold = -4:0.1:4
     [tn, tp, fp, fn, ac, TPR, p, FPR, net] = errorMeasurer(norm{1}, outcome, outcomeTest, 0.1, 20, threshold);
     expResults = [expResults; 0.1 20 tn tp fp fn ac TPR p FPR size(net.sv,1);]; %#ok<AGROW>
 end
-rocGenerator(['b-'], ['bo'], expResults(:,8), expResults(:,10));
+rocGenerator(['b-'], ['bo'], expResults(:,8), expResults(:,10), 'Performance of Baseline Detector');
