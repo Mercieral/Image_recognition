@@ -21,7 +21,6 @@ function result = lab6(img)
                     minK = i;
                 end
             end
-            minK
             result(r, c, 1) = minK;
         end
     end
@@ -30,8 +29,8 @@ end
 
 
 function dist = euclideanDist(x1, y1, z1, x2, y2, z2)
-    x = pow2(x1 - x2);
-    y = pow2(y1 - y2);
-    z = pow2(z1 - z2);
+    x = (x1 - x2) ^ 2;
+    y = (y1 - y2) ^ 2;
+    z = (z1 - z2) ^ 2;
     dist = sqrt(x + y + z);
 end 
