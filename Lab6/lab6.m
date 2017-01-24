@@ -49,6 +49,18 @@ function results = lab6(img, k, seed, iterations)
             results(x(p),y(p),3) = means(i,3);
         end
     end
+    %         if size(find(results(:,:,1) == i),1) == 0
+%             continue;
+%         else 
+% %             [x,y,z] = find(results(:,:,1)==i);
+% %             results(x,y,1) = means(i,1);
+%         end
+%         results(x,y,2) = means(i,2);
+%         results(x,y,3) = means(i,3);
+%         [x, y] = find(result==i)
+%         results(x, y, 1) = i;%means(i,1);
+%         results(x, y, 2) = i;%means(i,2);
+%         results(x, y, 3) = i;%means(i,3);
 end 
 
 
