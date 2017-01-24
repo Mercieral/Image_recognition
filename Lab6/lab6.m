@@ -1,7 +1,7 @@
 function results = lab6(img, k, seed, iterations)
 %     k = 5;
 %     seed = 0;
-    rand('state', seed);
+%    rand('state', seed);
     % Initialize k-cluster means, 3-D point
     means = rand(k, 3);
     
