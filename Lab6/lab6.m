@@ -3,7 +3,7 @@ function results = lab6(img, k, seed, iterations)
 %     seed = 0;
     rand('state', seed);
     % Initialize k-cluster means, 3-D point
-    means = rand(k, 3)
+    means = rand(k, 3);
     
     result = zeros(size(img, 1), size(img,2));
     
@@ -42,11 +42,13 @@ function results = lab6(img, k, seed, iterations)
     % Add color
     results = zeros(size(img, 1), size(img,2), size(img, 3));
     for i = 1:k
-%         results(find(result==i),1) = means(i,1);
-%         results(find(result==i),2) = means(i,2);
-%         results(find(result==i),3) = means(i,3);
+        [x,y] = find(result==i);
+        for p = 1:size(x,1)
+            results(x(p),y(p),1) = means(i,1);
+            results(x(p),y(p),2) = means(i,2);
+            results(x(p),y(p),3) = means(i,3);
+        end
     end
-
 end 
 
 
