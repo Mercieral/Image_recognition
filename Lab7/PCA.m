@@ -41,14 +41,14 @@ for i = 3:size(fileList,1)
     imgResized = imresize(img, 1/scale_factor);
     
     syms c1 c2 c3
-    eqn1 = imgResized(1,1,1) == mean2(1,1,1) + (c1 * v1(1,1,1)) + (c2 * v2(1,1,1)) + (c3 * v3(1,1,1));
-    eqn2 = imgResized(1,1,2) == mean2(1,1,2) + (c1 * v1(1,1,2)) + (c2 * v2(1,1,2)) + (c3 * v3(1,1,2));
-    eqn3 = imgResized(1,1,3) == mean2(1,1,3) + (c1 * v1(1,1,3)) + (c2 * v2(1,1,3)) + (c3 * v3(1,1,3));
+    eqn1 = double(imgResized(1,1,1)) == mean2(1,1,1) + (c1 * v1(1,1,1)) + (c2 * v2(1,1,1)) + (c3 * v3(1,1,1));
+    eqn2 = double(imgResized(1,1,2)) == mean2(1,1,2) + (c1 * v1(1,1,2)) + (c2 * v2(1,1,2)) + (c3 * v3(1,1,2));
+    eqn3 = double(imgResized(1,1,3)) == mean2(1,1,3) + (c1 * v1(1,1,3)) + (c2 * v2(1,1,3)) + (c3 * v3(1,1,3));
     [A,B] = equationsToMatrix([eqn1, eqn2, eqn3], [c1, c2, c3]);
     X = linsolve(A,B);
     
     if (strcmp(fileList(i).name, '20060606_173500.jpg') || strcmp(fileList(i).name,'20060607_081800.jpg')) 
-        disp(X)
+        disp(double(X))
         imtool(uint8(normalize(mean2 + (double(X(1)) .* v1) + (double(X(2)) .* v2) + (double(X(3)) .* v3))));
     end
     
