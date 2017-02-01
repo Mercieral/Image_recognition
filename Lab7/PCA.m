@@ -19,7 +19,11 @@ end
 
 %% determining eigenvectors using covariance matrix
 meanImg = mean(images,2);
-images = images - repmat(meanImg, 1, size(images,2));
+% Attempt to make this work for full size images
+for i = 1:size(images,2)
+    images(:,i) = images(:,i) - meanImg;
+end
+% images = images - repmat(meanImg, 1, size(images,2));
 c = images * transpose(images);
 c = c ./ size(images,2);
 
